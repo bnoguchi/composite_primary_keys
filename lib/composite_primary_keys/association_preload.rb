@@ -133,7 +133,7 @@ module CompositePrimaryKeys
             table_name = klass.quoted_table_name
             connection = reflection.active_record.connection
 
-            if composite?
+            if composite? || reflection.klass.composite?
               primary_key = klass.primary_key.to_s.split(CompositePrimaryKeys::ID_SEP)
               ids = id_map.keys.uniq.map {|id| id_map[id][:id]}
 
@@ -190,7 +190,7 @@ module CompositePrimaryKeys
           options = reflection.options
           table_name = reflection.klass.quoted_table_name
 
-          if interface = reflection.options[:as]
+          if composite? && interface = reflection.options[:as]
             raise AssociationNotSupported, "Polymorphic joins not supported for composite keys"
           else
             connection = reflection.active_record.connection

@@ -118,7 +118,7 @@ module ActiveRecord::Associations::ClassMethods
     class JoinAssociation < JoinBase
       alias single_association_join association_join
       def association_join
-        reflection.active_record.composite? ? composite_association_join : single_association_join
+        reflection.active_record.composite? || reflection.klass.composite? ? composite_association_join : single_association_join
       end
 
       def composite_association_join

@@ -1,6 +1,15 @@
 module ActiveRecord
   module Reflection
     class AssociationReflection
+      def initialize(macro, name, options, active_record)
+        super
+        if macro == :belongs_to && options[:foreign_key] && options[:foreign_key].is_a?(Array)
+          active_record.class_eval do
+            include CompositePrimaryKeys::ActiveRecord::AssociationPreload
+          end
+        end
+      end
+  
       def primary_key_name
         return @primary_key_name if @primary_key_name
         case

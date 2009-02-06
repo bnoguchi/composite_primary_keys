@@ -15,9 +15,22 @@ require 'fixtures/room_assignment'
 require 'fixtures/user'
 require 'fixtures/reading'
 
+require 'fixtures/department'
+require 'fixtures/comment'
+require 'fixtures/employee'
+
 class TestAssociations < Test::Unit::TestCase
   fixtures :articles, :products, :tariffs, :product_tariffs, :suburbs, :streets, :restaurants, :restaurants_suburbs,
-           :dorms, :rooms, :room_attributes, :room_attribute_assignments, :students, :room_assignments, :users, :readings
+           :dorms, :rooms, :room_attributes, :room_attribute_assignments, :students, :room_assignments, :users, :readings,
+           :departments, :comments, :employees
+
+  def test_find_all_includes_comp_belongs_to_department
+        assert @employee_departments = Employee.find(:all, :include => :department)
+          end 
+
+  def test_find_all_includes_com_belongs_to_department_with_eager_table_conditions
+    assert @employee_departments = Employee.find(:all, :include => :department, :conditions => ["departments.department_id IS NOT NULL"])
+  end
   
   def test_has_many_through_with_conditions_when_through_association_is_not_composite
     user = User.find(:first)
